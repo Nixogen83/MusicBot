@@ -15,9 +15,9 @@ namespace MusicBot.Config
             using (StreamReader sr = new StreamReader("config.json", new UTF8Encoding(false)))
             {
                 string json = await sr.ReadToEndAsync(); //Reading whole file
-                ConfigJSON obj = JsonConvert.DeserializeObject<ConfigJSON>(json); //Deserialising file into the ConfigJSON structure
+                ConfigJSON obj = JsonConvert.DeserializeObject<ConfigJSON>(json); //Converting file into the ConfigJSON structure
 
-                this.token = obj.Token; //Setting our token & prefix that we extracted from our file
+                this.token = obj.Token; //Setting token & prefix that we extracted from file
                 this.prefix = obj.Prefix;
             }
         }

@@ -16,6 +16,18 @@ namespace MusicBot.Commands
             await ctx.Channel.SendMessageAsync("Test Message");
         }
 
+        [Command("help")]
+        public async Task Help(CommandContext ctx)
+        {
+            await ctx.Channel.SendMessageAsync("Use prefix ! before every command. Don't write []\n" +
+                "DONT FORGET TO JOIN VC \n" +
+                "Commands list:\n" +
+                "!play [track name] - Starts the named track\n" +
+                "!pause - pause track\n" +
+                "!resume - resume track there stopped\n" +
+                "!stop - stop playing track and disconnect from the server");
+        }
+
         [Command("play")]
         public async Task PlayMusic(CommandContext ctx, [RemainingText] string query)
         {
@@ -23,7 +35,7 @@ namespace MusicBot.Commands
             var userVC = ctx.Member.VoiceState.Channel;
             var lavalinkInstance = ctx.Client.GetLavalink();
 
-            //PRE-EXECUTION Checks
+            //PRE Checks
             if (ctx.Member.VoiceState == null || userVC == null)
             {
                 await ctx.Channel.SendMessageAsync("Please enter a VC!");
@@ -54,7 +66,7 @@ namespace MusicBot.Commands
                 return;
             }
 
-            //Lavalink supports different services
+            //Lavalink searching services
             var searchQuery = await node.Rest.GetTracksAsync(query);
             if (searchQuery.LoadResultType == LavalinkLoadResultType.NoMatches || searchQuery.LoadResultType == LavalinkLoadResultType.LoadFailed)
             {
@@ -223,12 +235,6 @@ namespace MusicBot.Commands
             if (conn == null)
             {
                 await ctx.Channel.SendMessageAsync("Lavalink Failed to Connect!");
-                return;
-            }
-
-            if (conn.CurrentState.CurrentTrack == null)
-            {
-                await ctx.Channel.SendMessageAsync("No tracks are playing!");
                 return;
             }
 

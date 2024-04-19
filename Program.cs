@@ -18,11 +18,11 @@ namespace MusicBot
         public static CommandsNextExtension Commands { get; private set; }
         static async Task Main(string[] args)
         {
-            //1. Get the details of your config.json file by deserialising it
+            // Get the details config.json file by deserialising it
             var configJsonFile = new JSONReader();
             await configJsonFile.ReadJSON();
 
-            //2. Setting up the Bot Configuration
+            // Setting up the Bot Configuration
             var discordConfig = new DiscordConfiguration()
             {
                 Intents = DiscordIntents.All,
@@ -31,19 +31,19 @@ namespace MusicBot
                 AutoReconnect = true,
             };
 
-            //3. Apply this config to our DiscordClient
+            // Apply this config  DiscordClient
             Client = new DiscordClient(discordConfig);
 
-            //4. Set the default timeout for Commands that use interactivity
+            // Set the default timeout for Commands that use interactivity
             Client.UseInteractivity(new InteractivityConfiguration()
             {
                 Timeout = TimeSpan.FromMinutes(2)
             });
 
-            //5. Set up the Task Handler Ready event
+            // Set up the Task Handler Ready event
             Client.Ready += OnClientReady;
 
-            //6. Set up the Commands Configuration
+            // Set up the Commands Configuration
             var commandsConfig = new CommandsNextConfiguration()
             {
                 StringPrefixes = new string[] { configJsonFile.prefix },
@@ -55,33 +55,33 @@ namespace MusicBot
             Commands = Client.UseCommandsNext(commandsConfig);
 
 
-            //7. Register your commands
+            // Register commands
 
             Commands.RegisterCommands<MusicCommands>();
 
-            //Lavalink Configuration
+            // Lavalink Configuration
 
             var endpoint = new ConnectionEndpoint
             {
-                Hostname = "127.0.0.1",
-                Port = 2333,
+                Hostname = "lavalink-v3.oryzen.xyz",
+                Port = 80,
                 Secured = false
             };
 
             var lavalinkConfig = new LavalinkConfiguration
             {
-                Password = "youshallnotpass",
+                Password = "oryzen.xyz",
                 RestEndpoint = endpoint,
                 SocketEndpoint = endpoint
             };
 
             var lavalink = Client.UseLavalink();
 
-            //8. Connect to get the Bot online
+            // Connect to get the Bot online
             await Client.ConnectAsync();
             await lavalink.ConnectAsync(lavalinkConfig);
 
-            await Task.Delay(-1);
+            await Task.Delay(-1); //Infinite loop to prevent application from closing
         }
 
         private static Task OnClientReady(DiscordClient sender, ReadyEventArgs e)
